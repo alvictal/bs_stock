@@ -2,6 +2,7 @@ import mplfinance as mpf
 import numpy as np
 import yfinance as yf
 import argparse
+import os
 
 def calculate_bolling_bands(df):
   ### Bollinger Bands
@@ -68,6 +69,14 @@ def get_ticket_history_data(ticket_name):
     df = tickerData.history(period='5y', interval='1d')
     return df
 
+def move_to_result_directory(filename):
+    dirpath = './img'
+    if not os.path.exists(dirpath):
+        os.makedirs(dirpath)
+
+    os.rename(f'./{filename}', f'./{dirpath}/{filename}')
+
+
 
 def make_plots(sdf, ticket_name, low_signal_BB, high_signal_BB, low_signal_MA, high_signal_MA):
 
@@ -92,6 +101,8 @@ def make_plots(sdf, ticket_name, low_signal_BB, high_signal_BB, low_signal_MA, h
 
     mpf.plot(sdf, addplot=apds, type='candle', style=mystyle, panel_ratios=(1,0.1), title=ticket_name, 
              figscale=1.5, figratio=(12,10), volume=True, savefig=dict(fname=f'{ticket_name}.png',dpi=1080,pad_inches=0.25), tight_layout=True)    
+
+    move_to_result_directory(f'{ticket_name}.png')
 
 
 
