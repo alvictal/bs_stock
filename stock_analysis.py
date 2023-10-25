@@ -78,7 +78,7 @@ def move_to_result_directory(filename):
 
 
 
-def make_plots(sdf, ticket_name, low_signal_BB, high_signal_BB, low_signal_MA, high_signal_MA):
+def make_plots(sdf, ticket_name, low_signal_BB, high_signal_BB, low_signal_MA, high_signal_MA, lenght, tl=True):
 
     mystyle=mpf.make_mpf_style(base_mpf_style='ibd',rc={'axes.labelsize':'xx-small'})
 
@@ -100,9 +100,9 @@ def make_plots(sdf, ticket_name, low_signal_BB, high_signal_BB, low_signal_MA, h
         apds.append(mpf.make_addplot(high_signal_MA,type='scatter',markersize=50,marker='v', color="red"))
 
     mpf.plot(sdf, addplot=apds, type='candle', style=mystyle, panel_ratios=(1,0.1), title=ticket_name, 
-             figscale=1.5, figratio=(12,10), volume=True, savefig=dict(fname=f'{ticket_name}.png',dpi=1080,pad_inches=0.25), tight_layout=True)    
+             figscale=1.5, figratio=(12,10), volume=True, savefig=dict(fname=f'{ticket_name}-{lenght}.png',dpi=1080,pad_inches=0.25), tight_layout=tl)    
 
-    move_to_result_directory(f'{ticket_name}.png')
+    move_to_result_directory(f'{ticket_name}-{lenght}.png')
 
 
 
@@ -125,14 +125,23 @@ elif  (args.short_window_ma != None) and (args.long_window_ma != None):
 else:
     calculate_moving_average_crossover(df)
 
-sdf = df[-540:-1]
+long_df = df[-360:-1]
 
-low_signal  = percentB_belowzero(sdf['PercentB'], sdf['Close']) 
-high_signal = percentB_aboveone(sdf['PercentB'], sdf['Close'])
-low_signal_ma = percentB_belowzero(sdf['Position_MA'], sdf['Long_MA']) 
-high_signal_ma = percentB_aboveone(sdf['Position_MA'], sdf['Long_MA'])
+low_signal  = percentB_belowzero(long_df['PercentB'], long_df['Close']) 
+high_signal = percentB_aboveone(long_df['PercentB'], long_df['Close'])
+low_signal_ma = percentB_belowzero(long_df['Position_MA'], long_df['Long_MA']) 
+high_signal_ma = percentB_aboveone(long_df['Position_MA'], long_df['Long_MA'])
 
-make_plots(sdf, args.stock,  low_signal, high_signal, low_signal_ma, high_signal_ma)
+make_plots(long_df, args.stock,  low_signal, high_signal, low_signal_ma, high_signal_ma, '360d')
+
+short_df = df[-30:-1]
+
+low_signal  = percentB_belowzero(short_df['PercentB'], short_df['Close']) 
+high_signal = percentB_aboveone(short_df['PercentB'], short_df['Close'])
+low_signal_ma = percentB_belowzero(short_df['Position_MA'], short_df['Long_MA']) 
+high_signal_ma = percentB_aboveone(short_df['Position_MA'], short_df['Long_MA'])
+
+make_plots(short_df, args.stock,  low_signal, high_signal, low_signal_ma, high_signal_ma, '30d', False)
 
 
 
