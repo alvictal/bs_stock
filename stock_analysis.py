@@ -125,7 +125,7 @@ elif  (args.short_window_ma != None) and (args.long_window_ma != None):
 else:
     calculate_moving_average_crossover(df)
 
-long_df = df[-360:-1]
+long_df = df[-360:]
 
 low_signal  = percentB_belowzero(long_df['PercentB'], long_df['Close']) 
 high_signal = percentB_aboveone(long_df['PercentB'], long_df['Close'])
@@ -134,7 +134,7 @@ high_signal_ma = percentB_aboveone(long_df['Position_MA'], long_df['Long_MA'])
 
 make_plots(long_df, args.stock,  low_signal, high_signal, low_signal_ma, high_signal_ma, '360d')
 
-short_df = df[-30:-1]
+short_df = df[-30:]
 
 low_signal  = percentB_belowzero(short_df['PercentB'], short_df['Close']) 
 high_signal = percentB_aboveone(short_df['PercentB'], short_df['Close'])
