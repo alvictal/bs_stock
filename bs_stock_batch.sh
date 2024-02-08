@@ -22,3 +22,5 @@ python3 stock_analysis.py SUZB3.SA
 python3 stock_analysis.py BBDC4.SA
 python3 stock_analysis.py CMIG4.SA
 python3 stock_analysis.py BRSR6.SA
+python3 stock_analysis.py BOVA11.SA
+python3 stock_analysis.py ^BVSP
